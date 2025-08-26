@@ -35,6 +35,8 @@ export const PATH_LANDING = {
 export const PATH_DASHBOARD = {
   root: ROOTS_DASHBOARD,
   default: path(ROOTS_DASHBOARD, '/default'),
+  klines: path(ROOTS_DASHBOARD, '/klines'),
+  backtest: path(ROOTS_DASHBOARD, '/backtest'),
   projects: path(ROOTS_DASHBOARD, '/projects'),
   ecommerce: path(ROOTS_DASHBOARD, '/ecommerce'),
   marketing: path(ROOTS_DASHBOARD, '/marketing'),
