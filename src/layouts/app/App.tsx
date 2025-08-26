@@ -222,7 +222,14 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
               minHeight: 360,
             }}
           >
-            <TransitionGroup>
+            <div ref={nodeRef} style={{ background: 'none' }}>
+                {children}
+            </div>
+            {/* 去掉动画：
+            1 动画过度有问题，不管怎么切换都是 bottom-to-top，不顺滑，很难看
+            2 加上这个动画会导致页面组件mount 2次，直接进入url是mount 1次，而切换页面是2次。
+             */}
+            {/* <TransitionGroup>
               <SwitchTransition>
                 <CSSTransition
                   key={`css-transition-${location.key}`}
@@ -244,7 +251,7 @@ export const AppLayout = ({ children }: AppLayoutProps) => {
                   )}
                 </CSSTransition>
               </SwitchTransition>
-            </TransitionGroup>
+            </TransitionGroup> */}
             <div ref={floatBtnRef}>
               <FloatButton.BackTop />
             </div>

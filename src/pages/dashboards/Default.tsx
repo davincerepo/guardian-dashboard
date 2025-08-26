@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   Card,
   GetStartedCard,
@@ -18,6 +18,7 @@ import {
   CarouselProps,
   Col,
   Flex,
+  message,
   Row,
   Typography,
 } from 'antd';

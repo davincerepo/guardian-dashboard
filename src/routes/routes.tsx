@@ -46,19 +46,19 @@ import {
 import React, { ReactNode, useEffect } from 'react';
 import { AboutPage } from '../pages/About.tsx';
 import { BacktestDashboardPage } from 'src/pages/dashboards/Backtest.tsx';
-import { KLinesDashboardPage } from 'src/pages/dashboards/KLines.tsx';
+import { KLinesDashboardPage } from 'src/pages/dashboards/KLinesPage.tsx';
 
 // Custom scroll restoration function
 export const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
 
-  useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      left: 0,
-      behavior: 'smooth',
-    }); // Scroll to the top when the location changes
-  }, [pathname]);
+//   useEffect(() => {
+//     window.scrollTo({
+//       top: 0,
+//       left: 0,
+//       behavior: 'smooth',
+//     }); // Scroll to the top when the location changes
+//   }, [pathname]);
 
   return null; // This component doesn't render anything
 };

@@ -4,6 +4,7 @@ import {
 } from '@ant-design/icons';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { message } from 'antd';
 import {
     PageHeader
 } from '../../components';
@@ -11,6 +12,7 @@ import { DASHBOARD_ITEMS } from '../../constants';
 import { useEffect, useRef } from 'react';
 import { CandleStickChart } from 'src/components/Chart/CandleStickChart';
 import { KLineChart } from 'src/components/Chart/KLineChart';
+import { webConfig } from 'src/framework/config/WebConfig';
 
 const candleData = [
     { open: 10, high: 10.63, low: 9.49, close: 9.55, time: 1642427876 },
@@ -26,6 +28,13 @@ const candleData = [
 ];
 
 export const KLinesDashboardPage = () => {
+
+    useEffect(() => {
+        message.success('保存成功');
+        return () => {
+            message.success('卸载');
+        }
+    }, [])
 
     return (
         <div>
@@ -67,7 +76,7 @@ export const KLinesDashboardPage = () => {
             <div style={{
                 width: '90%'
             }}>
-                
+                <text>{crypto.randomUUID()}</text>
                 <KLineChart></KLineChart>
 
             </div>
