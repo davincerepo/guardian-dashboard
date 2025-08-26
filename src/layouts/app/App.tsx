@@ -37,8 +37,8 @@ import FooterNav from './FooterNav.tsx';
 import { NProgress } from '../../components';
 import { PATH_LANDING } from '../../constants';
 import { useSelector, useDispatch } from 'react-redux';
-import { toggleTheme } from '../../redux/theme/themeSlice.ts';
-import { RootState } from '../../redux/store.ts';
+import { toggleTheme } from '../../framework/redux/themeSlice.ts';
+import { RootState } from '../../framework/redux/store.ts';
 const { Content } = Layout;
 
 type AppLayoutProps = {

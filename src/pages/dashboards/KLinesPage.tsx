@@ -12,7 +12,8 @@ import { DASHBOARD_ITEMS } from '../../constants';
 import { useEffect, useRef } from 'react';
 import { CandleStickChart } from 'src/components/Chart/CandleStickChart';
 import { KLineChart } from 'src/components/Chart/KLineChart';
-import { webConfig } from 'src/framework/config/WebConfig';
+import KLineService from 'src/services/kline/KLineService';
+import { SettingKey, webSetting } from 'src/framework/config/WebSetting';
 
 const candleData = [
     { open: 10, high: 10.63, low: 9.49, close: 9.55, time: 1642427876 },
@@ -30,7 +31,13 @@ const candleData = [
 export const KLinesDashboardPage = () => {
 
     useEffect(() => {
-        message.success('保存成功');
+        message.success('11');
+
+        (async () => {
+            let res = await KLineService.hello("11")
+            console.log(res.body);
+        })()
+
         return () => {
             message.success('卸载');
         }

@@ -1,7 +1,11 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
-import themeReducer, { ThemeState } from './theme/themeSlice';
+import themeReducer, { ThemeState } from './themeSlice';
 import { persistReducer, persistStore, PersistConfig } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+
+/**
+ * 新增代码用 mobx，不用redux
+ */
 
 // Define the state shape
 interface RootState {

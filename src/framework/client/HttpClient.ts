@@ -1,6 +1,3 @@
-import * as FileSystem from 'expo-file-system'
-import appConfig from "src/framework/common/AppConfig"
-import NativeUtils from 'src/framework/native/NativeUtils'
 
 export interface HttpResult {
     success: boolean
@@ -47,62 +44,7 @@ async function fetchWithTimeout(input: RequestInfo, init?: RequestInit & { timeo
     }
 }
 
-async function upload(url: string, 
-    fileUri: string,
-    fileParamName: string = 'file',
-    formParams: Record<string, string> = {}): Promise<HttpResult> {
-
-    const fileInfo = await FileSystem.getInfoAsync(fileUri);
-    if (!fileInfo.exists || fileInfo.isDirectory) {
-        console.log(`file not exists: ${fileUri}`);
-        return {
-            success: false
-        }
-    }
-
-    console.log(`http upload url ${NativeUtils.isDebug() ? url : '***'}, file ${fileUri}, size ${fileInfo.size}`);
-    const mimeType = 'application/octet-stream'
-    const formData = new FormData();
-    formData.append(fileParamName, {
-        uri: fileUri,
-        type: mimeType,
-        name: 'test.'
-    });
-
-    for (const key in formParams) {
-        formData.append(key, formParams[key]);
-    }
-
-    try {
-        const rsp = await fetchWithTimeout(url, {
-            method: 'POST',
-            headers: {
-                // 'Content-Type': 'multipart/form-data',
-            },
-            body: formData,
-            timeout: appConfig.getClient_uploadTimeout()
-        })
-        console.log(`ok ${rsp.ok}, status ${rsp.status}`);
-        if (!rsp.ok) {
-            return {
-                success: false,
-                httpStatus: rsp.status
-            }
-        }
-        return {
-            success: true,
-            httpStatus: rsp.status,
-            body: await rsp.text()
-        }
-    } catch (err) {
-        console.log('fetch err', err);
-        return {
-            success: false
-        }
-    }
-}
 
 export default {
     fetchWithTimeout,
-    upload,
 }

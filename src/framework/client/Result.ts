@@ -1,4 +1,4 @@
-import { ErrorCode } from "src/enum/system/ErrorCode"
+import { ErrorCode } from "src/framework/client/ErrorCode"
 
 export class Result<T> {
     code: number = 0 // 异常码，0表示成功
