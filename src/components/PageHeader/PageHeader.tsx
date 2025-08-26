@@ -18,10 +18,10 @@ export const PageHeader = ({ breadcrumbs, title, ...others }: Props) => {
         >
           {title}
         </Typography.Title>
-        <Breadcrumb items={breadcrumbs} className="page-header-breadcrumbs" />
+        {/* <Breadcrumb items={breadcrumbs} className="page-header-breadcrumbs" /> */}
       </Space>
       <Divider orientation="right" plain>
-        <span style={{ textTransform: 'capitalize' }}>{title}</span>
+        {/* <span style={{ textTransform: 'capitalize' }}>{title}</span> */}
       </Divider>
     </div>
   );

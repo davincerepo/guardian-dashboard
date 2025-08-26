@@ -31,15 +31,7 @@ const candleData = [
 export const KLinesDashboardPage = () => {
 
     useEffect(() => {
-        message.success('11');
-
-        (async () => {
-            let res = await KLineService.hello("11")
-            console.log(res.body);
-        })()
-
         return () => {
-            message.success('卸载');
         }
     }, [])
 
@@ -81,10 +73,15 @@ export const KLinesDashboardPage = () => {
             />
 
             <div style={{
-                width: '90%'
+                width: '90%',
+                height: 500
             }}>
-                <text>{crypto.randomUUID()}</text>
-                <KLineChart></KLineChart>
+                <KLineChart symbol='BTCUSDT'
+                marketType={1}
+                level={60}
+                initTime={1748235339000}
+                loader={KLineService.query}
+                ></KLineChart>
 
             </div>
 

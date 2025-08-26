@@ -1,12 +1,12 @@
 import APIClient from "src/framework/client/APIClient"
 import { Result } from "src/framework/client/Result"
+import { KLinesRequest, KLinesResponse } from "src/types/KLineTypes"
 
-async function hello(name: string): Promise<Result<string>> {
-    const rsp = await APIClient.get('/hello', {
-    })
+async function query(req: KLinesRequest): Promise<Result<KLinesResponse>> {
+    const rsp = await APIClient.post('/klines/query', req)
     return rsp
 }
 
 export default {
-    hello
+    query
 }

@@ -1,32 +1,93 @@
-import { useEffect } from "react"
-import { init, dispose, Store } from 'klinecharts'
+import React, { useEffect, useState } from "react"
+import { init, dispose, Store, DataLoaderGetBarsParams, KLineData, FormatDateParams } from 'klinecharts'
+import { KLineLevel, KLinesRequest, KLinesResponse, MarketType } from "src/types/KLineTypes"
+import RandomUtils from "src/utils/RandomUtils"
+import { Result } from "src/framework/client/Result"
+import DateUtils from "src/utils/DateUtils"
+import dayjs from "dayjs"
 
-export const KLineChart = () => {
-  useEffect(() => {
-    const chart: Store = init('chart') as any
-    chart.setSymbol({ ticker: 'TestSymbol' } as any)
-    chart.setPeriod({ span: 1, type: 'day' })
-    chart.setDataLoader({
-      getBars: ({ callback}) => {
-        callback([
-          { timestamp: 1517846400000, open: 7424.6, high: 7511.3, low: 6032.3, close: 7310.1, volume: 224461 },
-          { timestamp: 1517932800000, open: 7310.1, high: 8499.9, low: 6810, close: 8165.4, volume: 148807 },
-          { timestamp: 1518019200000, open: 8166.7, high: 8700.8, low: 7400, close: 8245.1, volume: 24467 },
-          { timestamp: 1518105600000, open: 8244, high: 8494, low: 7760, close: 8364, volume: 29834 },
-          { timestamp: 1518192000000, open: 8363.6, high: 9036.7, low: 8269.8, close: 8311.9, volume: 28203 },
-          { timestamp: 1518278400000, open: 8301, high: 8569.4, low: 7820.2, close: 8426, volume: 59854 },
-          { timestamp: 1518364800000, open: 8426, high: 8838, low: 8024, close: 8640, volume: 54457 },
-          { timestamp: 1518451200000, open: 8640, high: 8976.8, low: 8360, close: 8500, volume: 51156 },
-          { timestamp: 1518537600000, open: 8504.9, high: 9307.3, low: 8474.3, close: 9307.3, volume: 49118 },
-          { timestamp: 1518624000000, open: 9307.3, high: 9897, low: 9182.2, close: 9774, volume: 48092 }
-        ])
-      }
-    })
+export interface KLineChartProps {
+    symbol: string
+    marketType: MarketType
+    level: KLineLevel
+    initTime: number // [startTime, endTime)
+    loader: (req: KLinesRequest) => Promise<Result<KLinesResponse>>
+    loadBatchSize?: number // 每次加载多少根
+}
 
-    return () => {
-      dispose('chart')
-    }
-  }, [])
+export const KLineChart: React.FC<KLineChartProps> = ({
+    symbol,
+    marketType,
+    level,
+    initTime,
+    loader,
+    loadBatchSize = 500
+}) => {
+    const [id,] = useState(() => RandomUtils.uuidStr())
 
-  return <div id="chart" style={{ width: 600, height: 600 }}/>
+    useEffect(() => {
+        const chart: Store = init(id) as any
+        chart.setSymbol({ ticker: symbol } as any)
+        chart.setPeriod({ span: level, type: 'second' })
+        chart.setFormatter({
+            formatDate: (params: FormatDateParams) => {
+                if (level >= KLineLevel.LV_1D) {
+                    return dayjs(params.timestamp).format("YYYY-MM-DD")
+                } else {
+                    return dayjs(params.timestamp).format("YYYY-MM-DD HH:mm:ss")
+                }
+            }
+        })
+        chart.setDataLoader({
+            getBars: async (params: DataLoaderGetBarsParams) => {
+                console.log(`KLineChart: getBars: ${JSON.stringify(params)}`);
+
+                let startTime = initTime - loadBatchSize * level * 1000
+                let endTime = initTime + loadBatchSize * level * 1000
+                if (params.type == 'forward') {
+                    endTime = params.timestamp! + level * 1000
+                    startTime = endTime - loadBatchSize * level * 1000
+                } else if (params.type == 'backward') {
+                    startTime = params.timestamp!
+                    endTime = startTime + loadBatchSize * level * 1000
+                }
+
+                let res = await loader({
+                    symbol: symbol,
+                    marketType: marketType,
+                    level: level,
+                    startTime: startTime,
+                    endTime: endTime,
+                })
+                if (!res.success) {
+                    console.error(`KLineChart: load kline data failed: ${res.msg}`);
+                    return
+                }
+
+                let klines: KLineData[] = []
+                for (let kline of res.body.klines) {
+                    klines.push({
+                        timestamp: kline.openTime,
+                        open: Number(kline.openPrice),
+                        high: Number(kline.highPrice),
+                        low: Number(kline.lowPrice),
+                        close: Number(kline.closePrice),
+                        volume: Number(kline.volume),
+                    })
+                }
+                params.callback(klines, {
+                    backward: true,
+                    forward: true
+                })
+            }
+        })
+
+        return () => {
+            dispose(id)
+        }
+    }, [])
+
+    return <div id={id} style={{
+        height: 450,
+    }} />
 }
