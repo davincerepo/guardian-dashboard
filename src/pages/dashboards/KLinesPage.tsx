@@ -77,10 +77,10 @@ export const KLinesDashboardPage = () => {
                 height: 500
             }}>
                 <KLineChart symbol='BTCUSDT'
-                marketType={1}
-                level={60}
-                initTime={1748235339000}
-                loader={KLineService.query}
+                    marketType={1}
+                    level={60}
+                    initTime={1748235339000}
+                    loader={KLineService.query}
                 ></KLineChart>
 
             </div>

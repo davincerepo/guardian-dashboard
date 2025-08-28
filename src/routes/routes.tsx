@@ -45,7 +45,7 @@ import {
 } from '../layouts';
 import React, { ReactNode, useEffect } from 'react';
 import { AboutPage } from '../pages/About.tsx';
-import { BacktestDashboardPage } from 'src/pages/dashboards/Backtest.tsx';
+import { BacktestDashboardPage } from 'src/pages/dashboards/BacktestPage.tsx';
 import { KLinesDashboardPage } from 'src/pages/dashboards/KLinesPage.tsx';
 
 // Custom scroll restoration function

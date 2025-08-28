@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { init, dispose, Store, DataLoaderGetBarsParams, KLineData, FormatDateParams } from 'klinecharts'
+import { init, dispose, Store, DataLoaderGetBarsParams, KLineData, FormatDateParams, Chart } from 'klinecharts'
 import { KLineLevel, KLinesRequest, KLinesResponse, MarketType } from "src/types/KLineTypes"
 import RandomUtils from "src/utils/RandomUtils"
 import { Result } from "src/framework/client/Result"
@@ -26,7 +26,7 @@ export const KLineChart: React.FC<KLineChartProps> = ({
     const [id,] = useState(() => RandomUtils.uuidStr())
 
     useEffect(() => {
-        const chart: Store = init(id) as any
+        const chart: Chart = init(id) as any
         chart.setSymbol({ ticker: symbol } as any)
         chart.setPeriod({ span: level, type: 'second' })
         chart.setFormatter({
@@ -38,6 +38,20 @@ export const KLineChart: React.FC<KLineChartProps> = ({
                 }
             }
         })
+        // chart.createIndicator('MA', false, { id: 'candle_pane' })
+        // chart.overrideIndicator({
+        //     name: 'MA',
+        //     shouldOhlc: false,
+        //     precision: 1,
+        //     calcParams: [10, 30],
+        //     styles: {
+        //         lines: [
+        //             { color: '#8fd3e8' },
+        //             { color: '#edafda' }
+        //         ]
+        //     }
+        // })
+        // chart.createIndicator('VOL')
         chart.setDataLoader({
             getBars: async (params: DataLoaderGetBarsParams) => {
                 console.log(`KLineChart: getBars: ${JSON.stringify(params)}`);

@@ -7,6 +7,13 @@ export enum MarketType {
     OKX_SPOT = 4,
 }
 
+export const MarketTypeMap: Record<MarketType, { name: string;  }> = {
+    [MarketType.BINANCE_FUTURE]: { name: "币安合约",  },
+    [MarketType.BINANCE_SPOT]: { name: "币安现货",  },
+    [MarketType.OKX_FUTURE]: { name: "OKX合约",  },
+    [MarketType.OKX_SPOT]: { name: "OKX现货",  },
+};
+
 export enum KLineLevel {
     LV_1S = 1,
     LV_1MIN = 60,
