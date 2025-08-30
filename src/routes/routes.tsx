@@ -47,6 +47,7 @@ import React, { ReactNode, useEffect } from 'react';
 import { AboutPage } from '../pages/About.tsx';
 import { BacktestDashboardPage } from 'src/pages/dashboards/BacktestPage.tsx';
 import { KLinesDashboardPage } from 'src/pages/dashboards/KLinesPage.tsx';
+import { BacktestReportPage } from 'src/pages/dashboards/BacktestReportPage.tsx';
 
 // Custom scroll restoration function
 export const ScrollToTop: React.FC = () => {
@@ -104,6 +105,10 @@ const router = createBrowserRouter([
       {
         path: 'backtest',
         element: <BacktestDashboardPage />,
+      },
+      {
+        path: 'backtestReport/:id',
+        element: <BacktestReportPage />,
       },
       {
         path: 'klines',
